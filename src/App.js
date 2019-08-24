@@ -4,6 +4,7 @@ import './App.css';
 import Tube from './components/tube'
 import { connect } from 'react-redux';
 import { changeBubbleCount, increaseBubbleCount, decreaseBubbleCount } from './redux';
+import BubbleContainer from './components/bubbleContainer';
 
 const numOfTubes = 10
 class App extends React.Component {
@@ -13,16 +14,21 @@ class App extends React.Component {
   
   componentWillMount() {
     this.tubes = []
-    for(var i = 0; i < numOfTubes; i++)
+    this.bubbleContainer = []
+    for(var i = 0; i < numOfTubes; i++) {
       this.tubes.push(<Tube/>)
+      this.bubbleContainer.push(<BubbleContainer/>)
+    }
   }
 
   render() {
     return (
       <div className="app">
-        <button onClick={() => this.props.decreaseBubbleCount()}> Click Me </button>
         <div className="tubes">
           {this.tubes}
+        </div>
+        <div className="tubes">
+          {this.bubbleContainer}
         </div>
       </div>
       

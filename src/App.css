@@ -17,5 +17,6 @@ body, html, #root {
   display: flex;
   flex-direction: row;
   justify-content: center;
-  align-items: center;
+  overflow-y: scroll;
+  position: absolute;
 }

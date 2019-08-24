@@ -4,7 +4,7 @@ import { store } from '../redux';
 import Bubble from './bubble'
 import _ from 'lodash'
 
-class Tube extends React.Component {
+class BubbleContainer extends React.Component {
     constructor(props) {
         super(props)
         this.state = store.getState()
@@ -16,9 +16,11 @@ class Tube extends React.Component {
 
     render() {
         return (
-            <div className="tube"/>
+            <div className="tube" style={{backgroundImage: 'none'}}>
+                {this.bubbles}
+            </div>
         );
     }
 }
 
-export default Tube;
+export default BubbleContainer;
