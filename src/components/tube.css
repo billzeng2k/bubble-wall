@@ -2,6 +2,7 @@
     background-image: linear-gradient(red, yellow, blue);
     max-width: 100px;
     width: 9%;
+    height: 80%;
     border-left: 1px solid black;
 }
 

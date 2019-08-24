@@ -19,10 +19,14 @@ class App extends React.Component {
 
   render() {
     return (
-      <div className="container">
+      <div className="app">
         <button onClick={() => this.props.decreaseBubbleCount()}> Click Me </button>
-        {this.tubes}
+        <div className="tubes">
+          {this.tubes}
+        </div>
       </div>
+      
+      
     );
   }
 }

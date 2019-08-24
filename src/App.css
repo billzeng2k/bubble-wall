@@ -3,9 +3,19 @@ body, html, #root {
   width: 100%;
 }
 
-.container {
-  display: flex;
-  height: 100%;
+.app {
   width: 100%;
-  justify-items: center;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.tubes {
+  height: 80%;
+  width: 80%;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
 }
