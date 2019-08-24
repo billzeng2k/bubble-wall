@@ -3,8 +3,8 @@ import './tube.css';
 import { store } from '../redux';
 import Bubble from './bubble'
 import _ from 'lodash'
+import { step } from '../globals'
 
-const step = 1000
 class BubbleContainer extends React.Component {
     constructor(props) {
         super(props)
@@ -13,7 +13,6 @@ class BubbleContainer extends React.Component {
         this.bubbles = _.map(_.keys(Array(this.state.bubbleCount)), (key) => <Bubble key={key} onChanged={() => this.onBubblePressed(key)} label={this.props.label ? (key * step / 1000) + 's' : null}/>)
         store.subscribe(() => {
             this.changeBubbleCount(store.getState().bubbleManager.bubbleCount - this.state.bubbleCount)
-            
         })
     }
 
@@ -45,7 +44,6 @@ class BubbleContainer extends React.Component {
     }
 
     render() {
-        console.log('he')
         return (
             <div className="tube" style={{backgroundImage: 'none'}}>
                 {this.bubbles}

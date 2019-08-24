@@ -8,7 +8,10 @@ class Bubble extends React.Component {
     constructor(props) {
         super(props)
         this.state = {on: false, mouseDown: false}
-        store.subscribe(() => this.pressedKey = store.getState().keyManager.pressedKey)
+        store.subscribe(() => {
+            this.pressedKey = store.getState().keyManager.pressedKey
+            this.setState({bubblesPlaying: store.getState().bubbleManager.bubblesPlaying})
+        })
     }
 
     swapState() {
@@ -18,12 +21,12 @@ class Bubble extends React.Component {
 
     render() {
         return (
-            <div style={{margin: 'auto', maxWidth: '80px'}}>
+            <div style={{margin: '0 auto', maxWidth: '80px'}}>
                 { this.props.label && <p className='label'> { this.props.label } </p>}
                 <img 
                     src={bubble} 
                     className='bubble' 
-                    style={{opacity: this.state.on ? 1 : 0.3}} 
+                    style={{opacity: this.state.on ? 1 : this.state.bubblesPlaying ? 0 : 0.3}} 
                     onClick={() => this.swapState()} 
                     onMouseMove={(e) => {
                         if(this.pressedKey == 16 && !this.state.on)

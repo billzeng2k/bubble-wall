@@ -2,15 +2,20 @@ import React from 'react';
 import './App.css';
 import Tube from './components/tube'
 import { connect } from 'react-redux';
-import { changeBubbleCount, increaseBubbleCount, decreaseBubbleCount, pressKey, releaseKey } from './redux';
+import { step, numOfTubes } from './globals'
+import { changeBubbleCount, increaseBubbleCount, decreaseBubbleCount, pressKey, releaseKey, bubblesPlaying } from './redux';
 import KeyHandler, { KEYDOWN, KEYUP } from 'react-key-handler';
 import BubbleContainer from './components/bubbleContainer';
+import { store } from './redux';
 import _ from 'lodash'
 
-const numOfTubes = 10
 class App extends React.Component {
   constructor(props) {
     super(props)
+    this.state = store.getState().bubbleManager
+    store.subscribe(() => {
+      this.setState(store.getState().bubbleManager)
+    })
   }
   
   componentWillMount() {
@@ -35,30 +40,39 @@ class App extends React.Component {
     console.log('CLOSING VALVE ' + valveNumber + ' AT ' + (new Date().getTime() - st))
   }
 
-  playSequence() {
+  async playSequence() {
     let commands = this.getAllCommands()
     let command = _.map(commands, (c) => c.next())
-    let finished = 0
-    const startTime = new Date().getTime()
-    this.loop = setInterval(() => {
-      let currentTime = new Date().getTime()
-      for(let i = 0; i < command.length; i++) {
-        let c = command[i]
-        if(c.done)
-          continue
-        if(c.value.time <= currentTime - startTime) {
-          if(c.value.open)
-            this.openValve(i, startTime)
-          else 
-            this.closeValve(i, startTime)
-          command[i] = commands[i].next()
-          if(command[i].done)
-            finished++
+    await this.setState({bubbleContainerStyle: {transform: 'translateY(100%)'}})
+    setTimeout(() => {
+      const startTime = new Date().getTime()
+      this.props.bubblesPlaying(true)
+      console.log(this.bubbleContainerRef.scrollHeight, this.bubbleContainerRef.clientHeight)
+      this.setState({bubbleContainerStyle: {transform: 'translateY(' + (this.bubbleContainerRef.clientHeight - this.bubbleContainerRef.scrollHeight) + 'px)', transition: 'transform ' + (step * this.state.bubbleCount / 1000) + 's linear', overflowY: 'visible'}})
+      // await this.setState({bubbleContainerStyle: {transform: 'translateY(0)', transition: 'transform ' + (step * this.state.bubbleCount) + 's'}})
+      this.loop = setInterval(() => {
+        let currentTime = new Date().getTime()
+        for(let i = 0; i < command.length; i++) {
+          let c = command[i]
+          if(c.done)
+            continue
+          if(c.value.time <= currentTime - startTime) {
+            if(c.value.open)
+              this.openValve(i, startTime)
+            else 
+              this.closeValve(i, startTime)
+            command[i] = commands[i].next()
+          }
         }
-      }
-      if(finished == numOfTubes) 
-        clearInterval(this.loop)
-    }, 100)
+        if(currentTime - startTime >= step * this.state.bubbleCount) {
+          clearInterval(this.loop)
+          setTimeout(() => {
+            this.props.bubblesPlaying(false)
+          this.setState({bubbleContainerStyle: {overflowY: 'scroll'}})
+          }, 2000)     
+        } 
+      }, 100)
+    }, 1000)
   }
 
   render() {
@@ -94,34 +108,31 @@ class App extends React.Component {
           keyValue='-'
           onKeyHandle={(e) => this.props.decreaseBubbleCount()}
         />
-        <button onClick={() => this.playSequence()}>Hello</button>
         <div className="bubble-wall"> 
           <div className="tubes">
             {this.tubes}
           </div>
-          <div className="tubes">
+          <div className="tubes" style={this.state.bubbleContainerStyle} ref={ref=>this.bubbleContainerRef=ref}>
             {this.bubbleContainer}
           </div>
         </div>
+        <button onClick={() => this.playSequence()}>Play Sequence</button>
       </div>
     );
   }
 }
-
-const mapStateToProps = state => ({
-  bubbleCount: state.bubbleCount,
-});
 
 const mapDispatchToProps = {
   changeBubbleCount,
   increaseBubbleCount,
   decreaseBubbleCount,
   pressKey,
-  releaseKey
+  releaseKey,
+  bubblesPlaying
 };
 
 const AppContainer = connect(
-  mapStateToProps,
+  null,
   mapDispatchToProps
 )(App);
 

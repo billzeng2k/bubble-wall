@@ -5,22 +5,24 @@ body, html, #root {
 
 .bubble-wall {
   position: relative;
-  height: 80%;
-  width: 80%;
+  overflow-y: hidden;
+  height: 90%;
+  width: 100%;
 }
 
 .app {
   width: 100%;
   height: 100%;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
 }
 
 .tubes {
-  width: 100%;
+  width: 90%;
   height: 100%;
-  padding-left: 100px;
+  padding-left: 10%;
   display: flex;
   flex-direction: row;
   justify-content: center;
