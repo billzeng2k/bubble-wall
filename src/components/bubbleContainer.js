@@ -4,15 +4,27 @@ import { store } from '../redux';
 import Bubble from './bubble'
 import _ from 'lodash'
 
+const step = 1000
 class BubbleContainer extends React.Component {
     constructor(props) {
         super(props)
-        this.state = store.getState()
-        this.bubbles = _.map(Array(this.state.bubbleCount), () => <Bubble/>)
-        store.subscribe(() => this.setState(store.getState()))
+        this.state = store.getState().bubbleManager
+        this.bubbleState = Array.apply(null, Array(this.state.bubbleCount)).map(() => false)
+        this.bubbles = _.map(_.keys(Array(this.state.bubbleCount)), (key) => <Bubble key={key} onChanged={() => this.onBubblePressed(key)} label={this.props.label ? (key * step / 1000) + 's' : null}/>)
+        store.subscribe(() => this.setState(store.getState().bubbleManager))
     }
 
+    onBubblePressed(index) {
+        this.bubbleState[index] = !this.bubbleState[index]
+    }
 
+    tubeToCommand() {
+        let command = [{open: this.bubbleState[0], time: 0}]
+        for(let i = 1; i < this.bubbleState.length; i++)
+            if(this.bubbleState[i] ^ this.bubbleState[i-1])
+                command.push({open: this.bubbleState[i], time: i * step})
+        return command
+    }
 
     render() {
         return (
