@@ -1,0 +1,5 @@
+.tube {
+    background-image: linear-gradient(red, yellow, blue);
+    max-width: 100px;
+    width: 9%;
+}

@@ -1,26 +1,45 @@
 import React from 'react';
 import logo from './logo.svg';
 import './App.css';
+import Tube from './components/tube'
+import { connect } from 'react-redux';
+import { changeBubbleCount, increaseBubbleCount, decreaseBubbleCount } from './redux';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+const numOfTubes = 10
+class App extends React.Component {
+  constructor(props) {
+    super(props)
+  }
+  
+  componentWillMount() {
+    this.tubes = []
+    for(var i = 0; i < numOfTubes; i++)
+      this.tubes.push(<Tube/>)
+  }
+
+  render() {
+    return (
+      <div className="container">
+        <button onClick={() => this.props.decreaseBubbleCount()}> Click Me </button>
+        {this.tubes}
+      </div>
+    );
+  }
 }
 
-export default App;
+const mapStateToProps = state => ({
+  bubbleCount: state.bubbleCount,
+});
+
+const mapDispatchToProps = {
+  changeBubbleCount,
+  increaseBubbleCount,
+  decreaseBubbleCount
+};
+
+const AppContainer = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(App);
+
+export default AppContainer;
