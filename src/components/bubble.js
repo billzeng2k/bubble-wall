@@ -11,11 +11,6 @@ class Bubble extends React.Component {
         store.subscribe(() => this.pressedKey = store.getState().keyManager.pressedKey)
     }
 
-    componentDidMount() {
-        this.dragImg = new Image(0,0);
-        this.dragImg.src = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
-    }
-
     swapState() {
         this.setState({on: !this.state.on})
         this.props.onChanged()
@@ -30,7 +25,6 @@ class Bubble extends React.Component {
                     className='bubble' 
                     style={{opacity: this.state.on ? 1 : 0.3}} 
                     onClick={() => this.swapState()} 
-                    onDragStart={(e) => e.dataTransfer.setDragImage(this.dragImg, 0, 0)}
                     onMouseMove={(e) => {
                         if(this.pressedKey == 16 && !this.state.on)
                             this.swapState()

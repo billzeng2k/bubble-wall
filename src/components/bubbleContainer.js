@@ -11,7 +11,25 @@ class BubbleContainer extends React.Component {
         this.state = store.getState().bubbleManager
         this.bubbleState = Array.apply(null, Array(this.state.bubbleCount)).map(() => false)
         this.bubbles = _.map(_.keys(Array(this.state.bubbleCount)), (key) => <Bubble key={key} onChanged={() => this.onBubblePressed(key)} label={this.props.label ? (key * step / 1000) + 's' : null}/>)
-        store.subscribe(() => this.setState(store.getState().bubbleManager))
+        store.subscribe(() => {
+            this.changeBubbleCount(store.getState().bubbleManager.bubbleCount - this.state.bubbleCount)
+            
+        })
+    }
+
+    changeBubbleCount(diff) {
+        if(diff > 0) {
+            this.bubbles = _.union(
+                this.bubbles,
+                _.map(_.keys(Array(this.state.diff)), (key) => {
+                    key = parseInt(key)+parseInt(this.state.bubbleCount) + 1
+                    return <Bubble key={key} onChanged={() => this.onBubblePressed(key)} label={this.props.label ? (key * step / 1000) + 's' : null}/>
+                })
+            )
+        } else if (diff < 0) {
+            this.bubbles.pop()
+        }
+        this.setState({bubbleCount: this.state.bubbleCount + diff})
     }
 
     onBubblePressed(index) {
@@ -27,6 +45,7 @@ class BubbleContainer extends React.Component {
     }
 
     render() {
+        console.log('he')
         return (
             <div className="tube" style={{backgroundImage: 'none'}}>
                 {this.bubbles}

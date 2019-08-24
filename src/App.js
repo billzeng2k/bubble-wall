@@ -84,6 +84,16 @@ class App extends React.Component {
           keyValue='Alt'
           onKeyHandle={(e) => this.props.releaseKey(e.keyCode)}
         />
+        <KeyHandler
+          keyEventName={KEYUP}
+          keyValue='='
+          onKeyHandle={(e) => this.props.increaseBubbleCount()}
+        />
+        <KeyHandler
+          keyEventName={KEYUP}
+          keyValue='-'
+          onKeyHandle={(e) => this.props.decreaseBubbleCount()}
+        />
         <button onClick={() => this.playSequence()}>Hello</button>
         <div className="bubble-wall"> 
           <div className="tubes">
