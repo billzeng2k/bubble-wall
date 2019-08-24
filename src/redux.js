@@ -52,15 +52,29 @@ export const keyManager = (state={}, action) => {
         case 'PRESS_KEY':
             return { pressedKey: action.keyCode }
         case 'RELEASE_KEY':
-            if(state.pressedKey == action.keyCode)
+            if(state.pressedKey === action.keyCode)
                 return { pressedKey: null }
         default:
             return state;
     }
 };
 
+export const changeRoute = route => ({
+    type: 'CHANGE_ROUTE',
+    route
+})
+
+export const routeManager = (state={}, action) => {
+    switch (action.type) {
+        case 'CHANGE_ROUTE':
+            return { route: action.route }
+        default:
+            return state;
+    }
+};
+
 export const reducers = combineReducers({
-    bubbleManager, keyManager
+    bubbleManager, keyManager, routeManager
 });
 
 // store.js
@@ -71,10 +85,13 @@ export function configureStore(initialState) {
 
 export const store = configureStore({
     bubbleManager: {
-        bubbleCount: 10,
+        bubbleCount: initialBubbleCount,
         bubblesPlaying: false
     },
     keyManager: {
         keyCode: null
+    },
+    routeManager: {
+        route: 'Sequence'
     }
 });

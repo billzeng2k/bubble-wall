@@ -1,4 +1,12 @@
 const step = 1000
-const numOfTubes = 10
+const numOfTubes = 9
 
-export {step, numOfTubes}
+function openValve(valueNumber) {
+    console.log('OPENING VALVE ' + valueNumber)
+}
+
+function closeValve(valveNumber) {
+    console.log('CLOSING VALVE ' + valveNumber)
+}
+
+export {step, numOfTubes, openValve, closeValve}

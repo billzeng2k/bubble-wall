@@ -9,8 +9,8 @@
     flex-direction: column;
     max-width: 100px;
     width: 9%;
-    /* min-height: 100%; */
     border-left: 1px solid black;
+    position: relative;
 }
 
 .tube:last-child {
@@ -19,14 +19,25 @@
 
 .bubble {
     width: 90%;
-    max-width: 80px;
     padding: 5% 5% 0;
+}
+
+.floatingBubble {
+    width: 80%;
+    transition: all 5s;
+    position: absolute; 
+    bottom: 0;
 }
 
 .label {
     position: absolute;
     padding: 0 20px;
     transform: translate(-100%, -100%)
+}
+
+.bottomAlignedLabel {
+    align-items: center;
+    justify-content: flex-end;
 }
 
 ::-webkit-scrollbar {

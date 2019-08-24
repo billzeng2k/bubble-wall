@@ -2,7 +2,6 @@ import React from 'react';
 import './tube.css';
 import bubble from './bubble.png'
 import { store } from '../redux';
-import { thisExpression } from '@babel/types';
 
 class Bubble extends React.Component {
     constructor(props) {
@@ -15,6 +14,8 @@ class Bubble extends React.Component {
     }
 
     swapState() {
+        if(this.state.bubblesPlaying)
+            return
         this.setState({on: !this.state.on})
         this.props.onChanged()
     }
@@ -29,9 +30,9 @@ class Bubble extends React.Component {
                     style={{opacity: this.state.on ? 1 : this.state.bubblesPlaying ? 0 : 0.3}} 
                     onClick={() => this.swapState()} 
                     onMouseMove={(e) => {
-                        if(this.pressedKey == 16 && !this.state.on)
+                        if(this.pressedKey === 16 && !this.state.on)
                             this.swapState()
-                        else if(this.pressedKey == 18 && this.state.on)
+                        else if(this.pressedKey === 18 && this.state.on)
                             this.swapState()
                     }}
                 />
