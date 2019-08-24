@@ -52,7 +52,7 @@ class Tube extends React.Component {
                     />
                 }
                 { this.state.bubbles }
-                <p> {this.props.label} </p>
+                <p> {this.props.label && this.props.label + " (" + this.props.note + ")"} </p>
             </div>
         );
     }
