@@ -10,7 +10,13 @@ class Bubble extends React.Component {
 
     render() {
         return (
-            <img src={bubble} className='bubble' style={{opacity: this.state.on ? 1 : 0.3}} onClick={() => this.setState({on: !this.state.on})} onDragStart={(e) => {e.preventDefault()}}/>
+            <img 
+                src={bubble} 
+                className='bubble' 
+                style={{opacity: this.state.on ? 1 : 0.3}} 
+                onClick={() => this.setState({on: !this.state.on})} 
+                onDragStart={(e) => {}}
+                onDragEnter={(e) => this.setState({on: !this.state.on})} />
         );
     }
 }
