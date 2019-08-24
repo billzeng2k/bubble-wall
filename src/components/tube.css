@@ -2,4 +2,9 @@
     background-image: linear-gradient(red, yellow, blue);
     max-width: 100px;
     width: 9%;
+    border-left: 1px solid black;
+}
+
+.tube:last-child {
+    border-right: 1px solid black;
 }
