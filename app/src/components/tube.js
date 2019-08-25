@@ -9,7 +9,6 @@ class Tube extends React.Component {
     constructor(props) {
         super(props)
         this.state = {on: false, bubbles: []}
-        changeColor(this.props.id, window.ledColors[this.props.id])
         this.bubblesCount = 0
     }
 
@@ -57,12 +56,17 @@ class Tube extends React.Component {
                 <p> {this.props.label && this.props.label + " (" + this.props.note + ")"} </p>
                 <div className="led-color" style={{backgroundColor: window.ledColors[this.props.id]}} onClick={() => {
                     if(window.ledColors[this.props.id] == 'red') 
+                        window.ledColors[this.props.id] = 'orange'
+                    else if(window.ledColors[this.props.id] == 'orange') 
+                        window.ledColors[this.props.id] = 'yellow'
+                    else if(window.ledColors[this.props.id] == 'yellow') 
+                        window.ledColors[this.props.id] = 'green'
+                    else if(window.ledColors[this.props.id] == 'green') 
                         window.ledColors[this.props.id] = 'blue'
                     else if(window.ledColors[this.props.id] == 'blue') 
-                        window.ledColors[this.props.id] = 'green'
+                        window.ledColors[this.props.id] = 'purple'
                     else 
                         window.ledColors[this.props.id] = 'red'
-                    changeColor(this.props.id, window.ledColors[this.props.id])
                     this.forceUpdate()
                 }}/>
             </div>

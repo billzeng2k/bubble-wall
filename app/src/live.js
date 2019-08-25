@@ -2,7 +2,7 @@ import React from 'react';
 import './App.css';
 import Tube from './components/tube'
 import { connect } from 'react-redux';
-import { numOfTubes, openValve, closeValve } from './globals'
+import { numOfTubes, openValve } from './globals'
 import { changeBubbleCount, increaseBubbleCount, decreaseBubbleCount, pressKey, releaseKey, bubblesPlaying, changeRoute } from './redux';
 import { Piano, KeyboardShortcuts, MidiNumbers } from 'react-piano';
 import SoundfontProvider from "./components/soundFontProvider.js";
@@ -35,9 +35,7 @@ class App extends React.Component {
         for(var i = 0; i < numOfTubes; i++) {
             this.tubes.push(<Tube key={"tube" + i} label={(i + 1) % 10} id={(i + 1) % 10} note={keyboardShortcuts[i].note} activateCallback={(open, valve) => {
                 if(open) 
-                    openValve(valve)
-                else
-                    closeValve(valve)
+                    openValve(valve, window.ledColors[valve])
             }}/>)
         }
     }

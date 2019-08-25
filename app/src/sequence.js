@@ -2,7 +2,7 @@ import React from 'react';
 import './App.css';
 import Tube from './components/tube'
 import { connect } from 'react-redux';
-import { step, numOfTubes, openValve, closeValve } from './globals'
+import { step, numOfTubes, openValve } from './globals'
 import { changeBubbleCount, increaseBubbleCount, decreaseBubbleCount, pressKey, releaseKey, bubblesPlaying, changeRoute } from './redux';
 import KeyHandler, { KEYDOWN, KEYUP } from 'react-key-handler';
 import BubbleContainer from './components/bubbleContainer';
@@ -29,7 +29,7 @@ class App extends React.Component {
     }
 
     getAllCommands() { 
-        return _.map(this.bubbles, (bubble) => bubble.tubeToCommand()[Symbol.iterator]())
+        return _.map(this.bubbles, (bubble) => bubble.bubbleState)
     }
 
     async playSequence() {
@@ -40,40 +40,30 @@ class App extends React.Component {
             return
         }
         let commands = this.getAllCommands()
-        let command = _.map(commands, (c) => c.next())
         await this.setState({bubbleContainerStyle: {transform: 'translateY(100%)'}})
         setTimeout(() => {
-        const startTime = new Date().getTime()
-        this.props.bubblesPlaying(true)
-        this.setState({bubbleContainerStyle: {transform: 'translateY(' + (this.bubbleContainerRef.clientHeight - this.bubbleContainerRef.scrollHeight) + 'px)', transition: 'transform ' + (step * this.state.bubbleCount / 1000) + 's linear', overflowY: 'visible'}})
-        // await this.setState({bubbleContainerStyle: {transform: 'translateY(0)', transition: 'transform ' + (step * this.state.bubbleCount) + 's'}})
-        this.loop = setInterval(() => {
-            let currentTime = new Date().getTime()
-            for(let i = 0; i < command.length; i++) {
-            let c = command[i]
-            if(c.done)
-                continue
-            if(c.value.time <= currentTime - startTime) {
-                if(c.value.open)
-                    openValve(i)
-                else 
-                    closeValve(i)
-                command[i] = commands[i].next()
-            }
-            }
-            if(currentTime - startTime >= step * this.state.bubbleCount) {
-                clearInterval(this.loop)
-                setTimeout(() => {
-                    this.props.bubblesPlaying(false)
-                    this.setState({bubbleContainerStyle: {overflowY: 'scroll'}})
-                }, 2000) 
-            } 
-        }, 100)
+            const startTime = new Date().getTime()
+            this.props.bubblesPlaying(true)
+            this.setState({bubbleContainerStyle: {transform: 'translateY(' + (this.bubbleContainerRef.clientHeight - this.bubbleContainerRef.scrollHeight) + 'px)', transition: 'transform ' + (step * this.state.bubbleCount / 1000) + 's linear', overflowY: 'visible'}})
+            // await this.setState({bubbleContainerStyle: {transform: 'translateY(0)', transition: 'transform ' + (step * this.state.bubbleCount) + 's'}})
+            this.loop = setInterval(() => {
+                let currentTime = new Date().getTime()
+                for(let i = 0; i < commands.length; i++) {
+                    if(commands[i][Math.floor((currentTime - startTime)/1000)])
+                        openValve(i, window.ledColors[i])
+                }
+                if(currentTime - startTime >= step * this.state.bubbleCount) {
+                    clearInterval(this.loop)
+                    setTimeout(() => {
+                        this.props.bubblesPlaying(false)
+                        this.setState({bubbleContainerStyle: {overflowY: 'scroll'}})
+                    }, 2000) 
+                } 
+            }, 1000)
         }, 1000)
     }
     
     render() {
-        console.log(this.state)
         return (
         <div className="container">
             <KeyHandler
