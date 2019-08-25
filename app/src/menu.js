@@ -40,7 +40,7 @@ class Menu extends React.Component {
                 </h1>
                 {!window.characteristic && <button onClick={() => this.connect()}>Connect</button>}
                 <div className="buttons">
-                    <button onClick={() => this.props.changeRoute('Live')}>Live</button>
+                    <button onClick={() => this.props.changeRoute('Live')} style={{backgroundColor: this.state == 'Live' ? '#2389da' : undefined }}>Live</button>
                     <button onClick={() => this.props.changeRoute('Sequence')}>Sequence</button>
                 </div>
             </div>
