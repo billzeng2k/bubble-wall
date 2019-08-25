@@ -3,6 +3,33 @@ body, html, #root {
   width: 100%;
 }
 
+.app {
+  display: flex;
+  flex-direction: row;
+  height: 100%;
+  width: 100%;
+}
+
+.menu {
+  height: 100%;
+  width: 40%;
+  float: left;
+  background-color: rgb(44, 101, 148);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.menu .logo {
+  height: 200px;
+  width: auto;
+}
+
+.menu h1 {
+  text-align: center;
+}
+
 .bubble-wall {
   position: relative;
   overflow-y: hidden;
@@ -10,7 +37,7 @@ body, html, #root {
   width: 100%;
 }
 
-.app {
+.container {
   width: 100%;
   height: 100%;
   display: flex;

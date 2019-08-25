@@ -1,16 +1,16 @@
 .tube {
-    /* Permalink - use to edit and share this gradient: https://colorzilla.com/gradient-editor/#000000+0,a7acaf+8,fcfefd+17,fcfefd+42,e8e8e8+51,e8e8e8+65,c5cace+90,000000+100 */
-    /* background: #000000; Old browsers */
-    /* background: -moz-linear-gradient(left,  #000000 0%, #a7acaf 8%, #fcfefd 17%, #fcfefd 42%, #e8e8e8 51%, #e8e8e8 65%, #c5cace 90%, #000000 100%); FF3.6-15 */
-    /* background: -webkit-linear-gradient(left,  #000000 0%,#a7acaf 8%,#fcfefd 17%,#fcfefd 42%,#e8e8e8 51%,#e8e8e8 65%,#c5cace 90%,#000000 100%); Chrome10-25,Safari5.1-6 */
-    /* background: linear-gradient(to right,  #000000 0%,#a7acaf 8%,#fcfefd 17%,#fcfefd 42%,#e8e8e8 51%,#e8e8e8 65%,#c5cace 90%,#000000 100%); W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-    /* filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#000000', endColorstr='#000000',GradientType=1 ); IE6-9 */
+    background: #000000;
+    background: -moz-linear-gradient(left,  #000000 0%, #a7acaf57 8%, #fcfefd57 17%, #fcfefd57 42%, #e8e8e857 51%, #e8e8e857 65%, #c5cace57 90%, #000000 100%);
+    background: -webkit-linear-gradient(left,  #000000 0%,#a7acaf57 8%,#fcfefd57 17%,#fcfefd57 42%,#e8e8e857 51%,#e8e8e857 65%,#c5cace57 90%,#000000 100%);
+    background: linear-gradient(to right,  #000000 0%,#a7acaf57 8%,#fcfefd57 17%,#fcfefd57 42%,#e8e8e857 51%,#e8e8e857 65%,#c5cace57 90%,#000000 100%); 
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#000000', endColorstr='#000000',GradientType=1 );
     display: flex;
     flex-direction: column;
     max-width: 100px;
     width: 9%;
     border-left: 1px solid black;
     position: relative;
+    margin: 0 20px;
 }
 
 .tube:last-child {
