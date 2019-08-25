@@ -92,7 +92,7 @@ const AppContainer = connect(
 
 function BasicPiano() {
     return (
-        <div style={{width: 0, height: 0, opacity: 0}}>
+        <div style={{width: 0, height: 0, opacity: 0, pointerEvents: 'none'}}>
             <SoundfontProvider
                 instrumentName="acoustic_grand_piano"
                 audioContext={audioContext}
