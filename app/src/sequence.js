@@ -33,6 +33,12 @@ class App extends React.Component {
     }
 
     async playSequence() {
+        if(this.state.bubblesPlaying) {
+            clearInterval(this.loop)
+            this.props.bubblesPlaying(false)
+            this.setState({bubbleContainerStyle: {overflowY: 'scroll'}})
+            return
+        }
         let commands = this.getAllCommands()
         let command = _.map(commands, (c) => c.next())
         await this.setState({bubbleContainerStyle: {transform: 'translateY(100%)'}})
@@ -56,11 +62,11 @@ class App extends React.Component {
             }
             }
             if(currentTime - startTime >= step * this.state.bubbleCount) {
-            clearInterval(this.loop)
-            setTimeout(() => {
-                this.props.bubblesPlaying(false)
-            this.setState({bubbleContainerStyle: {overflowY: 'scroll'}})
-            }, 2000) 
+                clearInterval(this.loop)
+                setTimeout(() => {
+                    this.props.bubblesPlaying(false)
+                    this.setState({bubbleContainerStyle: {overflowY: 'scroll'}})
+                }, 2000) 
             } 
         }, 100)
         }, 1000)
@@ -83,6 +89,7 @@ class App extends React.Component {
     }
 
     render() {
+        console.log(this.state)
         return (
         <div className="app">
             <KeyHandler
@@ -125,7 +132,7 @@ class App extends React.Component {
                     {this.bubbleContainer}
                 </div>
             </div>
-            <button onClick={() => this.playSequence()}>Play Sequence</button>
+            <button onClick={() => this.playSequence()}> { this.state.bubblesPlaying ? 'Stop Sequence' : 'Play Sequence' }</button>
         </div>
         );
     }
