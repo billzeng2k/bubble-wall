@@ -49,9 +49,9 @@ class App extends React.Component {
                 continue
             if(c.value.time <= currentTime - startTime) {
                 if(c.value.open)
-                    openValve(i)
+                    openValve(i, this.state.characteristic)
                 else 
-                    closeValve(i)
+                    closeValve(i, this.state.characteristic)
                 command[i] = commands[i].next()
             }
             }
@@ -60,10 +60,28 @@ class App extends React.Component {
             setTimeout(() => {
                 this.props.bubblesPlaying(false)
             this.setState({bubbleContainerStyle: {overflowY: 'scroll'}})
-            }, 2000)     
+            }, 2000) 
             } 
         }, 100)
         }, 1000)
+    }
+    
+    async connect() {
+        //31383DC4-525B-2052-838F-7FADD63D25FD
+        try {
+            let device = await navigator.bluetooth.requestDevice({ filters: [{
+                name: 'BUBBLE'
+            }], optionalServices: [0xFFE0] })
+            let server = await device.gatt.connect()
+            let service = await server.getPrimaryService(0xFFE0)
+            let characteristic = await service.getCharacteristic(0xFFE1);
+            this.setState({
+                characteristic
+            })
+        }
+        catch (error) {
+            console.log("Something went wrong. " + error);
+        };
     }
 
     render() {
@@ -100,6 +118,7 @@ class App extends React.Component {
                 onKeyHandle={(e) => this.props.decreaseBubbleCount()}
             />
             <button onClick={() => this.props.changeRoute('Live')}>Live</button>
+            {!this.state.characteristic && <button onClick={() => this.connect()}>Connect</button>}
             <div className="bubble-wall"> 
                 <div className="tubes">
                     {this.tubes}

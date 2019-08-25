@@ -35,11 +35,28 @@ class App extends React.Component {
         for(var i = 0; i < numOfTubes; i++) {
             this.tubes.push(<Tube key={"tube" + i} label={(i + 1) % 10} note={keyboardShortcuts[i].note} activateCallback={(open, valve) => {
                 if(open) 
-                    openValve(valve)
+                    openValve(valve, this.state.characteristic)
                 else
-                    closeValve(valve)
+                    closeValve(valve, this.state.characteristic)
             }}/>)
         }
+    }
+    async connect() {
+        //31383DC4-525B-2052-838F-7FADD63D25FD
+        try {
+            let device = await navigator.bluetooth.requestDevice({ filters: [{
+                name: 'BUBBLE'
+            }], optionalServices: [0xFFE0] })
+            let server = await device.gatt.connect()
+            let service = await server.getPrimaryService(0xFFE0)
+            let characteristic = await service.getCharacteristic(0xFFE1);
+            this.setState({
+                characteristic
+            })
+        }
+        catch (error) {
+            console.log("Something went wrong. " + error);
+        };
     }
 
     render() {
@@ -47,6 +64,7 @@ class App extends React.Component {
         <div className="app">
             <BasicPiano />
             <button onClick={() => this.props.changeRoute('Sequence')}>Sequence</button>
+            {!this.state.characteristic && <button onClick={() => this.connect()}>Connect</button>}
             <div className="bubble-wall"> 
                 <div className="tubes">
                     {this.tubes}
