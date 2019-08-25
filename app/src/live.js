@@ -33,11 +33,11 @@ class App extends React.Component {
         this.bubbleContainer = []
         this.bubbles = []
         for(var i = 0; i < numOfTubes; i++) {
-            this.tubes.push(<Tube key={"tube" + i} label={(i + 1) % 10} note={keyboardShortcuts[i].note} activateCallback={(open, valve) => {
+            this.tubes.push(<Tube key={"tube" + i} label={(i + 1) % 10} id={(i + 1) % 10} note={keyboardShortcuts[i].note} activateCallback={(open, valve) => {
                 if(open) 
-                    openValve(valve, this.state.characteristic)
+                    openValve(valve)
                 else
-                    closeValve(valve, this.state.characteristic)
+                    closeValve(valve)
             }}/>)
         }
     }
@@ -49,10 +49,8 @@ class App extends React.Component {
             }], optionalServices: [0xFFE0] })
             let server = await device.gatt.connect()
             let service = await server.getPrimaryService(0xFFE0)
-            let characteristic = await service.getCharacteristic(0xFFE1);
-            this.setState({
-                characteristic
-            })
+            window.characteristic = await service.getCharacteristic(0xFFE1);
+            this.setState({connected: true})
         }
         catch (error) {
             console.log("Something went wrong. " + error);
@@ -61,16 +59,16 @@ class App extends React.Component {
 
     render() {
         return (
-        <div className="app">
-            <BasicPiano />
-            <button onClick={() => this.props.changeRoute('Sequence')}>Sequence</button>
-            {!this.state.characteristic && <button onClick={() => this.connect()}>Connect</button>}
-            <div className="bubble-wall"> 
-                <div className="tubes">
-                    {this.tubes}
+            <div className="app">
+                <BasicPiano />
+                <button onClick={() => this.props.changeRoute('Sequence')}>Sequence</button>
+                {!window.characteristic && <button onClick={() => this.connect()}>Connect</button>}
+                <div className="bubble-wall"> 
+                    <div className="tubes">
+                        {this.tubes}
+                    </div>
                 </div>
             </div>
-        </div>
         );
     }
 }

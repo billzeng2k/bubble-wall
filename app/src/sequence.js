@@ -23,7 +23,7 @@ class App extends React.Component {
         this.bubbleContainer = []
         this.bubbles = []
         for(var i = 0; i < numOfTubes; i++) {
-            this.tubes.push(<Tube key={"tube" + i}/>)
+            this.tubes.push(<Tube key={"tube" + i} id={(i + 1) % 10}/>)
             this.bubbleContainer.push(<BubbleContainer key={"bubbleContainer" + i} ref={ref => this.bubbles.push(ref)} label={i === 0}/>)
         }
     }
@@ -49,9 +49,9 @@ class App extends React.Component {
                 continue
             if(c.value.time <= currentTime - startTime) {
                 if(c.value.open)
-                    openValve(i, this.state.characteristic)
+                    openValve(i)
                 else 
-                    closeValve(i, this.state.characteristic)
+                    closeValve(i)
                 command[i] = commands[i].next()
             }
             }
@@ -74,10 +74,8 @@ class App extends React.Component {
             }], optionalServices: [0xFFE0] })
             let server = await device.gatt.connect()
             let service = await server.getPrimaryService(0xFFE0)
-            let characteristic = await service.getCharacteristic(0xFFE1);
-            this.setState({
-                characteristic
-            })
+            window.characteristic = await service.getCharacteristic(0xFFE1);
+            this.setState({connected: true})
         }
         catch (error) {
             console.log("Something went wrong. " + error);
@@ -118,7 +116,7 @@ class App extends React.Component {
                 onKeyHandle={(e) => this.props.decreaseBubbleCount()}
             />
             <button onClick={() => this.props.changeRoute('Live')}>Live</button>
-            {!this.state.characteristic && <button onClick={() => this.connect()}>Connect</button>}
+            {!window.characteristic && <button onClick={() => this.connect()}>Connect</button>}
             <div className="bubble-wall"> 
                 <div className="tubes">
                     {this.tubes}

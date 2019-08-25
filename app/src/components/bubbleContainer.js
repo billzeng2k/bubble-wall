@@ -45,8 +45,9 @@ class BubbleContainer extends React.Component {
 
     render() {
         return (
-            <div className="tube" style={{backgroundImage: 'none'}}>
+            <div className="tube" style={{backgroundImage: 'none', border: 'none'}}>
                 {this.bubbles}
+                <div style={{width: '80%', paddingTop: '80%'}}/>
             </div>
         );
     }

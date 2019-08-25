@@ -73,6 +73,11 @@ export const routeManager = (state={}, action) => {
     }
 };
 
+export const connectToDevice = device => ({
+    type: 'CONNECTION',
+    device
+})
+
 export const reducers = combineReducers({
     bubbleManager, keyManager, routeManager
 });

@@ -1,20 +1,34 @@
 const step = 1000
 const numOfTubes = 9
+const encoder = new TextEncoder('utf-8');
 
-function openValve(valveNumber, characteristic) {
-    console.log(characteristic)
+function openValve(valveNumber) {
+    // console.log(characteristic)
     valveNumber += ",0"
-    let encoder = new TextEncoder('utf-8');
-    characteristic.writeValue(encoder.encode(valveNumber));
+    bus.push(valveNumber)
     console.log('OPENING VALVE ' + valveNumber)
 }
 
-function closeValve(valveNumber, characteristic) {
-    console.log(characteristic)
+function closeValve(valveNumber) {
+    // console.log(characteristic)
     valveNumber += ",1"
-    let encoder = new TextEncoder('utf-8');
-    characteristic.writeValue(encoder.encode(valveNumber));
+    bus.push(valveNumber)
     console.log('CLOSING VALVE ' + valveNumber)
 }
 
-export {step, numOfTubes, openValve, closeValve}
+function changeColor(ledNumber, color) {
+    bus.push(ledNumber + ',' + color[0])
+    console.log('Changed LED ' + ledNumber + ' color to ' + color)
+}
+
+let bus = []
+
+setInterval(() => {
+    if(bus.length && window.characteristic) {
+        console.log(bus.join('&'))
+        window.characteristic.writeValue(encoder.encode(bus.join('&')));
+        bus = []
+    }
+}, 1000)
+
+export {step, numOfTubes, openValve, closeValve, changeColor}
