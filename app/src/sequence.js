@@ -49,9 +49,9 @@ class App extends React.Component {
                 continue
             if(c.value.time <= currentTime - startTime) {
                 if(c.value.open)
-                    openValve(i)
+                    openValve(i, this.state.characteristic)
                 else 
-                    closeValve(i)
+                    closeValve(i, this.state.characteristic)
                 command[i] = commands[i].next()
             }
             }
@@ -69,54 +69,19 @@ class App extends React.Component {
     async connect() {
         //31383DC4-525B-2052-838F-7FADD63D25FD
         try {
-            let device = await navigator.bluetooth.requestDevice({ acceptAllDevices: true, optionalServices: [0xFFE0] })
+            let device = await navigator.bluetooth.requestDevice({ filters: [{
+                name: 'BUBBLE'
+            }], optionalServices: [0xFFE0] })
             let server = await device.gatt.connect()
             let service = await server.getPrimaryService(0xFFE0)
             let characteristic = await service.getCharacteristic(0xFFE1);
-            console.log(characteristic)
-            // Writing 1 is the signal to reset energy expended.
-            // var signal = Uint8Array.of("2,1");
-            var string = true;
-            var data = "2,1";
-            if (string) {
-                let encoder = new TextEncoder('utf-8');
-                characteristic.writeValue(encoder.encode(data));
-            } else {
-                let dataInUint8 = Uint8Array.from(data);
-                characteristic.writeValue(dataInUint8);
-            }
-            // let res = await characteristic.writeValue(signal);
+            this.setState({
+                characteristic
+            })
         }
         catch (error) {
             console.log("Something went wrong. " + error);
         };
-    }
-
-    toUTF8Array = (str) => {
-        var utf8 = [];
-        for (var i=0; i < str.length; i++) {
-            var charcode = str.charCodeAt(i);
-            if (charcode < 0x80) utf8.push(charcode);
-            else if (charcode < 0x800) {
-                utf8.push(0xc0 | (charcode >> 6), 
-                        0x80 | (charcode & 0x3f));
-            }
-            else if (charcode < 0xd800 || charcode >= 0xe000) {
-                utf8.push(0xe0 | (charcode >> 12), 
-                        0x80 | ((charcode>>6) & 0x3f), 
-                        0x80 | (charcode & 0x3f));
-            }
-            // surrogate pair
-            else {
-                i++;
-                charcode = ((charcode&0x3ff)<<10)|(str.charCodeAt(i)&0x3ff)
-                utf8.push(0xf0 | (charcode >>18), 
-                        0x80 | ((charcode>>12) & 0x3f), 
-                        0x80 | ((charcode>>6) & 0x3f), 
-                        0x80 | (charcode & 0x3f));
-            }
-        }
-        return utf8;
     }
 
     render() {
@@ -153,7 +118,7 @@ class App extends React.Component {
                 onKeyHandle={(e) => this.props.decreaseBubbleCount()}
             />
             <button onClick={() => this.props.changeRoute('Live')}>Live</button>
-            <button onClick={() => this.connect()}>Connect</button>
+            {!this.state.characteristic && <button onClick={() => this.connect()}>Connect</button>}
             <div className="bubble-wall"> 
                 <div className="tubes">
                     {this.tubes}
